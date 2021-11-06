@@ -1,0 +1,20 @@
+{
+  "name": "skript-reader",
+  "version": "1.0.0",
+  "description": "An Open Source Library for Reading Skript Code",
+  "author": "I-Cheng Lin",
+  "license": "ISC",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "keywords": [
+    "minecraft",
+    "skript",
+    "script",
+    "code",
+    "library",
+    "reader"
+  ],
+  "dependencies": {
+    "typescript": "next"
+  }
+}
