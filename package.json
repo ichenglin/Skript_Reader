@@ -1,9 +1,14 @@
 {
   "name": "skript-reader",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "An Open Source Library for Reading Skript Code",
   "author": "I-Cheng Lin",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fireclaws9/Skript_Reader"
+  },
+  "homepage": "https://github.com/fireclaws9/Skript_Reader#readme",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "keywords": [
@@ -14,7 +19,7 @@
     "library",
     "reader"
   ],
-  "dependencies": {
-    "typescript": "next"
-  }
+  "files": [
+    "build/"
+  ]
 }
