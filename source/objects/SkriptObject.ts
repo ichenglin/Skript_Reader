@@ -30,6 +30,9 @@ export class SkriptObject {
     }
 
     private evaluate_components(): SkriptObject[] {
+        if (this.object_content.length <= 0) {
+            return [];
+        }
         const type = this.object_type.toString();
         const type_components = object_type_components[type as keyof typeof object_type_components].child_components as string[];
         let component_divider = new SkriptDivider();
@@ -40,8 +43,7 @@ export class SkriptObject {
                     break;
 
                 case "variable":
-                    // prevent nested variable from causing infinite loop
-                    component_divider = evaluate_variable(this.object_content, component_divider, this.object_type === "variable" && this.object_content.match(/^{.*}$/) !== null);
+                    component_divider = evaluate_variable(this.object_content, component_divider, this.object_type);
                     break;
 
                 case "number":

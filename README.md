@@ -1,8 +1,8 @@
 <div align="center">
     <h1>Skript Reader</h1>
 	<p>An Open Source Library for Reading Skript Code</p>
-	<a href="https://packagephobia.now.sh/result?p=skript-reader"><img src="https://badgen.net/packagephobia/install/skript-reader" alt="Current version"></a>
-	<a href="https://www.npmjs.com/package/skript-reader"><img src="https://img.shields.io/npm/v/skript-reader" alt="Install size"></a>
+	<a href="https://packagephobia.now.sh/result?p=skript-reader"><img src="https://badgen.net/packagephobia/install/skript-reader@latest" alt="Install Size"></a>
+	<a href="https://www.npmjs.com/package/skript-reader"><img src="https://img.shields.io/npm/v/skript-reader" alt="Latest Version"></a>
 </div>
 
 ---
