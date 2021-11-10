@@ -3,22 +3,29 @@ import { evaluate_string } from "../reader/evaluate_string";
 import { SkriptDivider } from "./SkriptDivider";
 import { evaluate_variable } from "../reader/evaluate_variable";
 import { evaluate_number } from "../reader/evaluate_number";
+import { evaluate_expression } from "../reader/evaluate_expression";
 
 import * as object_type_components from "../data/object_component_types.json";
-import { evaluate_expression } from "../reader/evaluate_expression";
 
 export class SkriptObject {
 
     public object_content: string;
     public object_type: SkriptType;
+    public object_depth: number;
     public inner_components: SkriptObject[];
-    private evaluate_component: boolean;
 
-    constructor(content: string, type: SkriptType, evaluate_component: boolean = true) {
+    constructor(content: string, type: SkriptType, depth: number) {
         this.object_content = content;
-        this.object_type = type;
-        this.evaluate_component = evaluate_component;
-        this.inner_components = this.evaluate_components();
+        this.object_depth = depth;
+
+        if (type === "variable_body") {
+            // variable_body are variables, but they do not have any components
+            this.object_type = "variable";
+            this.inner_components = [];
+        } else {
+            this.object_type = type;
+            this.inner_components = this.evaluate_components();
+        }
     }
     
     public collapse_components(): SkriptObject[] {
@@ -58,7 +65,7 @@ export class SkriptObject {
                     break;
             }
         }
-        return component_divider.export_component(this.object_content, this.object_type === "variable" ? "variable_body" : this.object_type);
+        return component_divider.export_component(this.object_content, this.object_type === "variable" ? "variable_body" : this.object_type, this.object_depth);
     }
 
 };

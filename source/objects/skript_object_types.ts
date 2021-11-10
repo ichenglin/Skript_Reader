@@ -1,1 +1,1 @@
-export type SkriptType = "body" | "string" | "variable" | "variable_body" | "number" | "expression";
+export type SkriptType = "body" | "string" | "number" | "expression" | "variable" | "variable_body";

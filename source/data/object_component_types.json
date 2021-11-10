@@ -8,13 +8,10 @@
     "number": {
         "child_components": []
     },
-    "variable": {
-        "child_components": ["expression", "variable"]
-    },
-    "variable_body": {
-        "child_components": []
-    },
     "expression": {
         "child_components": ["string", "variable", "number"]
+    },
+    "variable": {
+        "child_components": ["expression", "variable"]
     }
 }

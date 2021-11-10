@@ -35,19 +35,19 @@ export class SkriptDivider {
         return this.components.filter(loop_component => loop_component.begin_index <= end && loop_component.end_index >= begin);
     }
 
-    public export_component(script: string, fallback_type: SkriptType): SkriptObject[] {
+    public export_component(script: string, fallback_type: SkriptType, parent_depth: number): SkriptObject[] {
         this.sort_component();
         let export_objects = [], next_index = 0;
         for (let component_index = 0; component_index < this.components.length; component_index++) {
             const loop_component = this.components[component_index];
             if (loop_component.begin_index >= next_index + 1) {
-                export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: fallback_type}));
+                export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: fallback_type}, parent_depth));
             }
-            export_objects.push(divider_component_to_object(script, loop_component));
+            export_objects.push(divider_component_to_object(script, loop_component, parent_depth));
             next_index = loop_component.end_index + 1;
         }
         if (this.components.length > 0 && script.length >= next_index + 1) {
-            export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: script.length - 1, component_type: fallback_type}));
+            export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: script.length - 1, component_type: fallback_type}, parent_depth));
         }
         return export_objects;
     }
@@ -58,7 +58,7 @@ export class SkriptDivider {
 
 }
 
-function divider_component_to_object(script: string, divider_component: SkriptDividerComponent): SkriptObject {
+function divider_component_to_object(script: string, divider_component: SkriptDividerComponent, parent_depth: number): SkriptObject {
     const script_component = script.slice(divider_component.begin_index, divider_component.end_index + 1);
-    return new SkriptObject(script_component, divider_component.component_type, false);
+    return new SkriptObject(script_component, divider_component.component_type, parent_depth + 1);
 }

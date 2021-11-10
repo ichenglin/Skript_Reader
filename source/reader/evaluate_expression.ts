@@ -1,5 +1,4 @@
 import { SkriptDivider, SkriptDividerComponent } from "../objects/SkriptDivider";
-import { SkriptType } from "../objects/skript_object_types";
 import { reader_error } from "../system/reader_error";
 import { evaluate_string } from "./evaluate_string";
 import { evaluate_variable } from "./evaluate_variable";
@@ -9,6 +8,7 @@ export function evaluate_expression(script: string, divider: SkriptDivider): Skr
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
             case "%":
+                // found expression begin/ending character
                 if (expression_stage === false) {
                     expression_stage = true;
                     expression_begin = script_index;
