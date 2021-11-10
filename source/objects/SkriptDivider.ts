@@ -25,7 +25,13 @@ export class SkriptDivider {
         this.components.push(component);
     }
 
+    public get_component(): SkriptDividerComponent[] {
+        this.sort_component();
+        return this.components;
+    }
+
     public override_component(begin: number, end: number): SkriptDividerComponent[] {
+        // find all components that override the given component
         return this.components.filter(loop_component => loop_component.begin_index <= end && loop_component.end_index >= begin);
     }
 
@@ -34,7 +40,7 @@ export class SkriptDivider {
         let export_objects = [], next_index = 0;
         for (let component_index = 0; component_index < this.components.length; component_index++) {
             const loop_component = this.components[component_index];
-            if (loop_component.begin_index > next_index + 1) {
+            if (loop_component.begin_index >= next_index + 1) {
                 export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: fallback_type}));
             }
             export_objects.push(divider_component_to_object(script, loop_component));
@@ -54,5 +60,5 @@ export class SkriptDivider {
 
 function divider_component_to_object(script: string, divider_component: SkriptDividerComponent): SkriptObject {
     const script_component = script.slice(divider_component.begin_index, divider_component.end_index + 1);
-    return new SkriptObject(script_component, divider_component.component_type);
+    return new SkriptObject(script_component, divider_component.component_type, false);
 }

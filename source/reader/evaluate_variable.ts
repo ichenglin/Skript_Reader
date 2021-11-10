@@ -17,17 +17,8 @@ export function evaluate_variable(script: string, divider: SkriptDivider, parent
             case "}":
                 variable_stage--;
                 if (variable_stage === 0) {
-                    //
-                    // to be redone using expression
-                    //
-                    // variable in string must be surrounded by %
-                    /*if (parent_type === "string" && script[variable_begin - 1] === "%" && script[script_index + 1] === "%") {
-                        divider.add_component({begin_index: variable_begin - 1, end_index: script_index + 1, component_type: "variable"} as SkriptDividerComponent);
-                    } else if (parent_type !== "string") {
-                        divider.add_component({begin_index: variable_begin, end_index: script_index, component_type: "variable"} as SkriptDividerComponent);
-                    }*/
                     divider.add_component({begin_index: variable_begin, end_index: script_index, component_type: "variable"} as SkriptDividerComponent);
-                } else if (variable_stage < 0 && parent_type !== "variable") {
+                } else if (variable_stage < 0 && parent_type !== "variable" && parent_type !== "expression") {
                     throw reader_error("unexpected variable enclose character '}'", script.slice(variable_begin, script_index + 1));
                 }
                 break;

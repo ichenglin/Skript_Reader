@@ -5,16 +5,19 @@ import { evaluate_variable } from "../reader/evaluate_variable";
 import { evaluate_number } from "../reader/evaluate_number";
 
 import * as object_type_components from "../data/object_component_types.json";
+import { evaluate_expression } from "../reader/evaluate_expression";
 
 export class SkriptObject {
 
     public object_content: string;
     public object_type: SkriptType;
     public inner_components: SkriptObject[];
+    private evaluate_component: boolean;
 
-    constructor(content: string, type: SkriptType) {
+    constructor(content: string, type: SkriptType, evaluate_component: boolean = true) {
         this.object_content = content;
         this.object_type = type;
+        this.evaluate_component = evaluate_component;
         this.inner_components = this.evaluate_components();
     }
     
@@ -48,6 +51,10 @@ export class SkriptObject {
 
                 case "number":
                     component_divider = evaluate_number(this.object_content, component_divider);
+                    break;
+
+                case "expression":
+                    component_divider = evaluate_expression(this.object_content, component_divider);
                     break;
             }
         }

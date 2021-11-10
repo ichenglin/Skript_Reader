@@ -3,15 +3,18 @@
         "child_components": ["string", "variable", "number"]
     },
     "string": {
-        "child_components": ["variable"]
+        "child_components": ["expression", "variable"]
     },
     "number": {
         "child_components": []
     },
     "variable": {
-        "child_components": ["variable"]
+        "child_components": ["expression", "variable"]
     },
     "variable_body": {
         "child_components": []
+    },
+    "expression": {
+        "child_components": ["string", "variable", "number"]
     }
 }
