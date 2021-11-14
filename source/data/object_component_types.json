@@ -1,17 +1,30 @@
 {
     "body": {
-        "child_components": ["string", "variable", "number"]
+        "maximum_depth": 1,
+        "child_components": ["comment", "indention", "string", "variable", "number"]
     },
     "string": {
+        "maximum_depth": null,
         "child_components": ["expression", "variable"]
     },
     "number": {
+        "maximum_depth": null,
         "child_components": []
     },
     "expression": {
+        "maximum_depth": null,
         "child_components": ["string", "variable", "number"]
     },
     "variable": {
+        "maximum_depth": null,
         "child_components": ["expression", "variable"]
+    },
+    "indention": {
+        "maximum_depth": 1,
+        "child_components": []
+    },
+    "comment": {
+        "maximum_depth": 1,
+        "child_components": []
     }
 }

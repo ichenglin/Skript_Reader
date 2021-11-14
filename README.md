@@ -11,6 +11,7 @@
 
 - Divide single-line script into different components.
 - Provides both nested and collapsed export structure.
+- Interpret structure by general syntax, adapt to all add-on format.
 
 ## Installation
 
@@ -24,14 +25,16 @@ Body,
 String,
 Number,
 Expression,
-Variable
+Variable,
+Indention,
+Comment
 ```
 
 ## Example
 
 ```js
 const skript_reader = require("skript-reader");
-const script = "send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*}";
+const script = "    send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*} #this is an example";
 
 try {
   // prints nested structure
@@ -49,10 +52,16 @@ try {
 Result (Nested)
 ```ts
 {
-  "object_content": "send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*}",
+  "object_content": "    send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*} #this is an example",
   "object_depth": 0,
   "object_type": "body",
   "inner_components": [
+    {
+      "object_content": "    ",
+      "object_depth": 1,
+      "object_type": "indention",
+      "inner_components": []
+    },
     {
       "object_content": "send ",
       "object_depth": 1,
@@ -133,6 +142,18 @@ Result (Nested)
       "object_depth": 1,
       "object_type": "variable",
       "inner_components": []
+    },
+    {
+      "object_content": " ",
+      "object_depth": 1,
+      "object_type": "body",
+      "inner_components": []
+    },
+    {
+      "object_content": "#this is an example",
+      "object_depth": 1,
+      "object_type": "comment",
+      "inner_components": []
     }
   ]
 }
@@ -140,6 +161,12 @@ Result (Nested)
 Result (Collapsed)
 ```ts
 [
+  SkriptObject {
+    object_content: '    ',
+    object_depth: 1,
+    object_type: 'indention',
+    inner_components: []
+  },
   SkriptObject {
     object_content: 'send ',
     object_depth: 1,
@@ -198,6 +225,18 @@ Result (Collapsed)
     object_content: '{_all_players::*}',
     object_depth: 1,
     object_type: 'variable',
+    inner_components: []
+  },
+  SkriptObject {
+    object_content: ' ',
+    object_depth: 1,
+    object_type: 'body',
+    inner_components: []
+  },
+  SkriptObject {
+    object_content: '#this is an example',
+    object_depth: 1,
+    object_type: 'comment',
     inner_components: []
   }
 ]
