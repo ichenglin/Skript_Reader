@@ -7,9 +7,9 @@ import { evaluate_number } from "../reader/evaluate_number";
 import { evaluate_expression } from "../reader/evaluate_expression";
 import { evaluate_comment } from "../reader/evaluate_comment";
 import { evaluate_indention } from "../reader/evaluate_indention";
+import { evaluate_function } from "../reader/evaluate_function";
 
 import * as object_type_components from "../data/object_component_types.json";
-import { evaluate_function } from "../reader/evaluate_function";
 
 export class SkriptObject {
 

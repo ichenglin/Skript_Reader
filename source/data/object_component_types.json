@@ -1,7 +1,7 @@
 {
     "body": {
         "maximum_depth": 1,
-        "child_components": ["comment", "indention", "string", "function", "variable", "number"]
+        "child_components": ["comment", "indention", "function", "string", "variable", "number"]
     },
     "string": {
         "maximum_depth": null,
@@ -13,7 +13,7 @@
     },
     "expression": {
         "maximum_depth": null,
-        "child_components": ["string", "function", "variable", "number"]
+        "child_components": ["function", "string", "variable", "number"]
     },
     "variable": {
         "maximum_depth": null,
