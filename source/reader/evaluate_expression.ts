@@ -1,9 +1,10 @@
 import { SkriptDivider, SkriptDividerComponent } from "../objects/SkriptDivider";
+import { SkriptType } from "../objects/skript_object_types";
 import { reader_error } from "../system/reader_error";
 import { evaluate_string } from "./evaluate_string";
 import { evaluate_variable } from "./evaluate_variable";
 
-export function evaluate_expression(script: string, divider: SkriptDivider): SkriptDivider {
+export function evaluate_expression(script: string, divider: SkriptDivider, parent_types: SkriptType[]): SkriptDivider {
     let expression_stage = false, expression_begin = -1;
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
@@ -23,7 +24,7 @@ export function evaluate_expression(script: string, divider: SkriptDivider): Skr
                 if (expression_stage === false) {
                     break;
                 }
-                const ignore_string_component = evaluate_string(script.slice(expression_begin), new SkriptDivider()).get_component();
+                const ignore_string_component = evaluate_string(script.slice(expression_begin), new SkriptDivider(), parent_types, true).get_component();
                 if (ignore_string_component.length <= 0) {
                     throw reader_error("incomplete expression statement", script.slice(expression_begin));
                 }

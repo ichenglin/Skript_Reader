@@ -35,19 +35,26 @@ export class SkriptDivider {
         return this.components.filter(loop_component => loop_component.begin_index <= end && loop_component.end_index >= begin);
     }
 
-    public export_component(script: string, fallback_type: SkriptType, parent_depth: number): SkriptObject[] {
+    public export_component(script: string, parent_object: SkriptObject): SkriptObject[] {
         this.sort_component();
+        const component_fallback_type = parent_object.object_type === "variable" ? "variable_body" : parent_object.object_type;
         let export_objects = [], next_index = 0;
         for (let component_index = 0; component_index < this.components.length; component_index++) {
             const loop_component = this.components[component_index];
             if (loop_component.begin_index >= next_index + 1) {
-                export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: fallback_type}, parent_depth));
+                export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: component_fallback_type}, parent_object.object_depth, parent_object.parent_types));
             }
-            export_objects.push(divider_component_to_object(script, loop_component, parent_depth));
+            // clone parent object parent types
+            let loop_component_parent_types = parent_object.parent_types;
+            if (!loop_component_parent_types.includes(parent_object.object_type)) {
+                // add new parent type if not included
+                loop_component_parent_types.push(parent_object.object_type);
+            }
+            export_objects.push(divider_component_to_object(script, loop_component, parent_object.object_depth, loop_component_parent_types));
             next_index = loop_component.end_index + 1;
         }
         if (this.components.length > 0 && script.length >= next_index + 1) {
-            export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: script.length - 1, component_type: fallback_type}, parent_depth));
+            export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: script.length - 1, component_type: component_fallback_type}, parent_object.object_depth, parent_object.parent_types));
         }
         return export_objects;
     }
@@ -58,7 +65,7 @@ export class SkriptDivider {
 
 }
 
-function divider_component_to_object(script: string, divider_component: SkriptDividerComponent, parent_depth: number): SkriptObject {
+function divider_component_to_object(script: string, divider_component: SkriptDividerComponent, parent_depth: number, parent_types: SkriptType[]): SkriptObject {
     const script_component = script.slice(divider_component.begin_index, divider_component.end_index + 1);
-    return new SkriptObject(script_component, divider_component.component_type, parent_depth + 1);
+    return new SkriptObject(script_component, divider_component.component_type, parent_depth + 1, parent_types);
 }

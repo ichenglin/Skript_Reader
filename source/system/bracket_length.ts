@@ -1,9 +1,10 @@
 import { SkriptDivider } from "../objects/SkriptDivider";
+import { SkriptType } from "../objects/skript_object_types";
 import { evaluate_string } from "../reader/evaluate_string";
 import { evaluate_variable } from "../reader/evaluate_variable";
 import { reader_error } from "./reader_error";
 
-export function bracket_length(script: string): number {
+export function bracket_length(script: string, parent_types: SkriptType[]): number {
     let bracket_depth = 0, bracket_begin = -1;
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
@@ -26,7 +27,7 @@ export function bracket_length(script: string): number {
 
             case "\"":
                 // ignore string
-                const ignore_string = evaluate_string(script.slice(script_index), new SkriptDivider()).get_component()[0];
+                const ignore_string = evaluate_string(script.slice(script_index), new SkriptDivider(), parent_types).get_component()[0];
                 const ignore_string_length = ignore_string.end_index - ignore_string.begin_index + 1;
                 script_index += ignore_string_length - 1;
                 break;

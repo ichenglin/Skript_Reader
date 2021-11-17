@@ -1,9 +1,10 @@
 import { SkriptDivider, SkriptDividerComponent } from "../objects/SkriptDivider";
+import { SkriptType } from "../objects/skript_object_types";
 import { bracket_length } from "../system/bracket_length";
 import { reader_error } from "../system/reader_error";
 import { evaluate_string } from "./evaluate_string";
 
-export function evaluate_function(script: string, divider: SkriptDivider): SkriptDivider {
+export function evaluate_function(script: string, divider: SkriptDivider, parent_types: SkriptType[]): SkriptDivider {
     let function_stage = false, function_begin = -1;
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
@@ -14,7 +15,7 @@ export function evaluate_function(script: string, divider: SkriptDivider): Skrip
                     function_stage = true;
                     function_begin = script_index - function_name_length;
                 } else if (function_stage === true) {
-                    script_index += bracket_length(script.slice(script_index)) - 1;
+                    script_index += bracket_length(script.slice(script_index), parent_types) - 1;
                 }
                 break;
 
@@ -27,7 +28,7 @@ export function evaluate_function(script: string, divider: SkriptDivider): Skrip
 
             case "\"":
                 // ignore function located in string
-                const ignore_string = evaluate_string(script.slice(script_index), new SkriptDivider()).get_component()[0];
+                const ignore_string = evaluate_string(script.slice(script_index), new SkriptDivider(), parent_types).get_component()[0];
                 const ignore_string_length = ignore_string.end_index - ignore_string.begin_index + 1;
                 script_index += ignore_string_length - 1;
                 break

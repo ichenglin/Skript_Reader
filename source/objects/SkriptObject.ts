@@ -17,10 +17,12 @@ export class SkriptObject {
     public object_type: SkriptType;
     public object_depth: number;
     public inner_components: SkriptObject[];
+    public parent_types: SkriptType[];
 
-    constructor(content: string, type: SkriptType, depth: number) {
+    constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[]) {
         this.object_content = content;
         this.object_depth = depth;
+        this.parent_types = parent_types;
 
         if (type === "variable_body") {
             // variable_body are variables, but they do not have any components
@@ -60,7 +62,7 @@ export class SkriptObject {
             }
             switch (loop_type_component) {
                 case "string":
-                    component_divider = evaluate_string(this.object_content, component_divider);
+                    component_divider = evaluate_string(this.object_content, component_divider, this.parent_types);
                     break;
 
                 case "variable":
@@ -72,11 +74,11 @@ export class SkriptObject {
                     break;
 
                 case "expression":
-                    component_divider = evaluate_expression(this.object_content, component_divider);
+                    component_divider = evaluate_expression(this.object_content, component_divider, this.parent_types);
                     break;
 
                 case "function":
-                    component_divider = evaluate_function(this.object_content, component_divider);
+                    component_divider = evaluate_function(this.object_content, component_divider, this.parent_types);
                     break;
 
                 case "indention":
@@ -88,7 +90,7 @@ export class SkriptObject {
                     break;
             }
         }
-        return component_divider.export_component(this.object_content, this.object_type === "variable" ? "variable_body" : this.object_type, this.object_depth);
+        return component_divider.export_component(this.object_content, this);
     }
 
 };
