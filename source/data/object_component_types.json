@@ -1,7 +1,7 @@
 {
     "body": {
         "maximum_depth": 1,
-        "child_components": ["comment", "indention", "string", "variable", "number"]
+        "child_components": ["comment", "indention", "string", "function", "variable", "number"]
     },
     "string": {
         "maximum_depth": null,
@@ -13,11 +13,15 @@
     },
     "expression": {
         "maximum_depth": null,
-        "child_components": ["string", "variable", "number"]
+        "child_components": ["string", "function", "variable", "number"]
     },
     "variable": {
         "maximum_depth": null,
         "child_components": ["expression", "variable"]
+    },
+    "function": {
+        "maximum_depth": null,
+        "child_components": ["string", "variable", "number"]
     },
     "indention": {
         "maximum_depth": 1,

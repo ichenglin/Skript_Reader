@@ -9,6 +9,7 @@ import { evaluate_comment } from "../reader/evaluate_comment";
 import { evaluate_indention } from "../reader/evaluate_indention";
 
 import * as object_type_components from "../data/object_component_types.json";
+import { evaluate_function } from "../reader/evaluate_function";
 
 export class SkriptObject {
 
@@ -72,6 +73,10 @@ export class SkriptObject {
 
                 case "expression":
                     component_divider = evaluate_expression(this.object_content, component_divider);
+                    break;
+
+                case "function":
+                    component_divider = evaluate_function(this.object_content, component_divider);
                     break;
 
                 case "indention":
