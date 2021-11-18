@@ -26,6 +26,7 @@ String,
 Number,
 Expression,
 Variable,
+Function,
 Indention,
 Comment
 ```
@@ -34,7 +35,7 @@ Comment
 
 ```js
 const skript_reader = require("skript-reader");
-const script = "    send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*} #this is an example";
+const script = "send \"hello %display_name({_uuid::%player%})%\" to {_players::*} #this is an example";
 
 try {
   // prints nested structure
@@ -52,65 +53,91 @@ try {
 Result (Nested)
 ```ts
 {
-  "object_content": "    send \"Hello %{_player_nickname::%player's uuid%}%\" to {_all_players::*} #this is an example",
+  "object_content": "send \"hello %display_name({_uuid::%player%})%\" to {_players::*} #this is an example",
   "object_depth": 0,
+  "parent_types": [],
   "object_type": "body",
   "inner_components": [
     {
-      "object_content": "    ",
-      "object_depth": 1,
-      "object_type": "indention",
-      "inner_components": []
-    },
-    {
       "object_content": "send ",
       "object_depth": 1,
+      "parent_types": [],
       "object_type": "body",
       "inner_components": []
     },
     {
-      "object_content": "\"Hello %{_player_nickname::%player's uuid%}%\"",
+      "object_content": "\"hello %display_name({_uuid::%player%})%\"",
       "object_depth": 1,
+      "parent_types": [ "body" ],
       "object_type": "string",
       "inner_components": [
         {
-          "object_content": "\"Hello ",
+          "object_content": "\"hello ",
           "object_depth": 2,
+          "parent_types": [ "body" ],
           "object_type": "string",
           "inner_components": []
         },
         {
-          "object_content": "%{_player_nickname::%player's uuid%}%",
+          "object_content": "%display_name({_uuid::%player%})%",
           "object_depth": 2,
+          "parent_types": [ "body", "string" ],
           "object_type": "expression",
           "inner_components": [
             {
               "object_content": "%",
               "object_depth": 3,
+              "parent_types": [ "body", "string" ],
               "object_type": "expression",
               "inner_components": []
             },
             {
-              "object_content": "{_player_nickname::%player's uuid%}",
+              "object_content": "display_name({_uuid::%player%})",
               "object_depth": 3,
-              "object_type": "variable",
+              "parent_types": [ "body", "string", "expression" ],
+              "object_type": "function",
               "inner_components": [
                 {
-                  "object_content": "{_player_nickname::",
+                  "object_content": "display_name(",
                   "object_depth": 4,
-                  "object_type": "variable",
+                  "parent_types": [ "body", "string", "expression" ],
+                  "object_type": "function",
                   "inner_components": []
                 },
                 {
-                  "object_content": "%player's uuid%",
+                  "object_content": "{_uuid::%player%}",
                   "object_depth": 4,
-                  "object_type": "expression",
-                  "inner_components": []
+                  "parent_types": [ "body", "string", "expression", "function" ],
+                  "object_type": "variable",
+                  "inner_components": [
+                    {
+                      "object_content": "{_uuid::",
+                      "object_depth": 5,
+                      "parent_types": [ "body", "string", "expression", "function" ],
+                      "object_type": "variable",
+                      "inner_components": []
+                    },
+                    {
+                      "object_content": "%player%",
+                      "object_depth": 5,
+                      "parent_types": [ "body", "string", "expression", "function", "variable" ],
+                      "object_type": "expression",
+                      "inner_components": []
+                    },
+                    {
+                      "object_content": "}",
+                      "object_depth": 5,
+                      "parent_types": [ "body", "string", "expression", "function" ],
+                      "object_type": "variable",
+                      "inner_components": []
+                    }
+                  ]
                 },
                 {
-                  "object_content": "}",
+                  "object_content": ")",
                   "object_depth": 4,
-                  "object_type": "variable",
+                  "parent_types": [ "body", "string", "expression" ],
+                  "object_type": "function",
                   "inner_components": []
                 }
               ]
@@ -118,6 +145,7 @@ Result (Nested)
             {
               "object_content": "%",
               "object_depth": 3,
+              "parent_types": [ "body", "string" ],
               "object_type": "expression",
               "inner_components": []
             }
@@ -126,6 +154,7 @@ Result (Nested)
         {
           "object_content": "\"",
           "object_depth": 2,
+          "parent_types": [ "body" ],
           "object_type": "string",
           "inner_components": []
         }
@@ -134,24 +163,28 @@ Result (Nested)
     {
       "object_content": " to ",
       "object_depth": 1,
+      "parent_types": [],
       "object_type": "body",
       "inner_components": []
     },
     {
-      "object_content": "{_all_players::*}",
+      "object_content": "{_players::*}",
       "object_depth": 1,
+      "parent_types": [ "body" ],
       "object_type": "variable",
       "inner_components": []
     },
     {
       "object_content": " ",
       "object_depth": 1,
+      "parent_types": [],
       "object_type": "body",
       "inner_components": []
     },
     {
       "object_content": "#this is an example",
       "object_depth": 1,
+      "parent_types": [ "body" ],
       "object_type": "comment",
       "inner_components": []
     }
@@ -162,80 +195,100 @@ Result (Collapsed)
 ```ts
 [
   SkriptObject {
-    object_content: '    ',
-    object_depth: 1,
-    object_type: 'indention',
-    inner_components: []
-  },
-  SkriptObject {
     object_content: 'send ',
     object_depth: 1,
+    parent_types: [],
     object_type: 'body',
     inner_components: []
   },
   SkriptObject {
-    object_content: '"Hello ',
+    object_content: '"hello ',
     object_depth: 2,
+    parent_types: [ 'body' ],
     object_type: 'string',
     inner_components: []
   },
   SkriptObject {
     object_content: '%',
     object_depth: 3,
+    parent_types: [ 'body', 'string' ],
     object_type: 'expression',
     inner_components: []
   },
   SkriptObject {
-    object_content: '{_player_nickname::',
+    object_content: 'display_name(',
     object_depth: 4,
+    parent_types: [ 'body', 'string', 'expression' ],
+    object_type: 'function',
+    inner_components: []
+  },
+  SkriptObject {
+    object_content: '{_uuid::',
+    object_depth: 5,
+    parent_types: [ 'body', 'string', 'expression', 'function' ],
     object_type: 'variable',
     inner_components: []
   },
   SkriptObject {
-    object_content: "%player's uuid%",
-    object_depth: 4,
+    object_content: '%player%',
+    object_depth: 5,
+    parent_types: [ 'body', 'string', 'expression', 'function', 'variable' ],
     object_type: 'expression',
     inner_components: []
   },
   SkriptObject {
     object_content: '}',
-    object_depth: 4,
+    object_depth: 5,
+    parent_types: [ 'body', 'string', 'expression', 'function' ],
     object_type: 'variable',
+    inner_components: []
+  },
+  SkriptObject {
+    object_content: ')',
+    object_depth: 4,
+    parent_types: [ 'body', 'string', 'expression' ],
+    object_type: 'function',
     inner_components: []
   },
   SkriptObject {
     object_content: '%',
     object_depth: 3,
+    parent_types: [ 'body', 'string' ],
     object_type: 'expression',
     inner_components: []
   },
   SkriptObject {
     object_content: '"',
     object_depth: 2,
+    parent_types: [ 'body' ],
     object_type: 'string',
     inner_components: []
   },
   SkriptObject {
     object_content: ' to ',
     object_depth: 1,
+    parent_types: [],
     object_type: 'body',
     inner_components: []
   },
   SkriptObject {
-    object_content: '{_all_players::*}',
+    object_content: '{_players::*}',
     object_depth: 1,
+    parent_types: [ 'body' ],
     object_type: 'variable',
     inner_components: []
   },
   SkriptObject {
     object_content: ' ',
     object_depth: 1,
+    parent_types: [],
     object_type: 'body',
     inner_components: []
   },
   SkriptObject {
     object_content: '#this is an example',
     object_depth: 1,
+    parent_types: [ 'body' ],
     object_type: 'comment',
     inner_components: []
   }

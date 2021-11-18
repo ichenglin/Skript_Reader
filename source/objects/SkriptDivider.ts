@@ -44,8 +44,8 @@ export class SkriptDivider {
             if (loop_component.begin_index >= next_index + 1) {
                 export_objects.push(divider_component_to_object(script, {begin_index: next_index, end_index: loop_component.begin_index - 1, component_type: component_fallback_type}, parent_object.object_depth, parent_object.parent_types));
             }
-            // clone parent object parent types
-            let loop_component_parent_types = parent_object.parent_types;
+            // clone parent object parent types with different reference
+            let loop_component_parent_types = [...parent_object.parent_types];
             if (!loop_component_parent_types.includes(parent_object.object_type)) {
                 // add new parent type if not included
                 loop_component_parent_types.push(parent_object.object_type);

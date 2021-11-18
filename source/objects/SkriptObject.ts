@@ -13,11 +13,11 @@ import * as object_type_components from "../data/object_component_types.json";
 
 export class SkriptObject {
 
-    public object_content: string;
-    public object_type: SkriptType;
-    public object_depth: number;
-    public inner_components: SkriptObject[];
-    public parent_types: SkriptType[];
+    readonly object_content: string;
+    readonly object_type: SkriptType;
+    readonly object_depth: number;
+    readonly inner_components: SkriptObject[];
+    readonly parent_types: SkriptType[];
 
     constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[]) {
         this.object_content = content;
