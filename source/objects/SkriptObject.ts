@@ -19,19 +19,16 @@ export class SkriptObject {
     readonly inner_components: SkriptObject[];
     readonly parent_types: SkriptType[];
 
-    constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[]) {
+    private object_final: boolean;
+
+    constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[], final: boolean) {
         this.object_content = content;
         this.object_depth = depth;
         this.parent_types = parent_types;
+        this.object_final = final;
 
-        if (type === "variable_body") {
-            // variable_body are variables, but they do not have any components
-            this.object_type = "variable";
-            this.inner_components = [];
-        } else {
-            this.object_type = type;
-            this.inner_components = this.evaluate_components();
-        }
+        this.object_type = type;
+        this.inner_components = this.object_final ? [] : this.evaluate_components();
     }
     
     public collapse_components(): SkriptObject[] {
@@ -62,11 +59,11 @@ export class SkriptObject {
             }
             switch (loop_type_component) {
                 case "string":
-                    component_divider = evaluate_string(this.object_content, component_divider, this.parent_types);
+                    component_divider = evaluate_string(this.object_content, component_divider, this);
                     break;
 
                 case "variable":
-                    component_divider = evaluate_variable(this.object_content, component_divider, this.object_type);
+                    component_divider = evaluate_variable(this.object_content, component_divider, this);
                     break;
 
                 case "number":
@@ -74,11 +71,11 @@ export class SkriptObject {
                     break;
 
                 case "expression":
-                    component_divider = evaluate_expression(this.object_content, component_divider, this.parent_types);
+                    component_divider = evaluate_expression(this.object_content, component_divider, this);
                     break;
 
                 case "function":
-                    component_divider = evaluate_function(this.object_content, component_divider, this.parent_types);
+                    component_divider = evaluate_function(this.object_content, component_divider, this);
                     break;
 
                 case "indention":
@@ -94,3 +91,11 @@ export class SkriptObject {
     }
 
 };
+
+export class SkriptObjectTypeOnly extends SkriptObject {
+
+    constructor(type: SkriptType) {
+        super("", type, -1, [], true);
+    }
+
+}

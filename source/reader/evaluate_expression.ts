@@ -1,10 +1,9 @@
 import { SkriptDivider, SkriptDividerComponent } from "../objects/SkriptDivider";
-import { SkriptType } from "../objects/skript_object_types";
+import { SkriptObject, SkriptObjectTypeOnly } from "../objects/SkriptObject";
+import { expression_child } from "../system/expression_child";
 import { reader_error } from "../system/reader_error";
-import { evaluate_string } from "./evaluate_string";
-import { evaluate_variable } from "./evaluate_variable";
 
-export function evaluate_expression(script: string, divider: SkriptDivider, parent_types: SkriptType[]): SkriptDivider {
+export function evaluate_expression(script: string, divider: SkriptDivider, parent_object: SkriptObject): SkriptDivider {
     let expression_stage = false, expression_begin = -1;
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
@@ -24,11 +23,7 @@ export function evaluate_expression(script: string, divider: SkriptDivider, pare
                 if (expression_stage === false) {
                     break;
                 }
-                const ignore_string_component = evaluate_string(script.slice(expression_begin), new SkriptDivider(), parent_types, true).get_component();
-                if (ignore_string_component.length <= 0) {
-                    throw reader_error("incomplete expression statement", script.slice(expression_begin));
-                }
-                script_index += ignore_string_component[0].end_index - ignore_string_component[0].begin_index;
+                script_index += expression_child(script.slice(script_index), parent_object) - 1;
                 break;
 
             case "{":
@@ -36,11 +31,7 @@ export function evaluate_expression(script: string, divider: SkriptDivider, pare
                 if (expression_stage === false) {
                     break;
                 }
-                const ignore_variable_component = evaluate_variable(script.slice(expression_begin), new SkriptDivider(), "expression").get_component();
-                if (ignore_variable_component.length <= 0) {
-                    throw reader_error("incomplete expression statement", script.slice(expression_begin));
-                }
-                script_index += ignore_variable_component[0].end_index - ignore_variable_component[0].begin_index;
+                script_index += expression_child(script.slice(script_index), new SkriptObjectTypeOnly("expression")) - 1;
                 break;
         }
     }
