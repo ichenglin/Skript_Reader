@@ -49,7 +49,7 @@ export class SkriptObject {
         }
         const type = this.object_type.toString();
         const type_components = object_type_components[type as keyof typeof object_type_components].child_components as SkriptType[];
-        let component_divider = new SkriptDivider();
+        let component_divider = new SkriptDivider(), content_without_comment = this.object_content;
         for (let type_components_index = 0; type_components_index < type_components.length; type_components_index++) {
             const loop_type_component = type_components[type_components_index];
             const loop_type_maximum_depth = object_type_components[loop_type_component as keyof typeof object_type_components].maximum_depth;
@@ -59,31 +59,33 @@ export class SkriptObject {
             }
             switch (loop_type_component) {
                 case "string":
-                    component_divider = evaluate_string(this.object_content, component_divider, this);
+                    component_divider = evaluate_string(content_without_comment, component_divider, this);
                     break;
 
                 case "variable":
-                    component_divider = evaluate_variable(this.object_content, component_divider, this);
+                    component_divider = evaluate_variable(content_without_comment, component_divider, this);
                     break;
 
                 case "number":
-                    component_divider = evaluate_number(this.object_content, component_divider);
+                    component_divider = evaluate_number(content_without_comment, component_divider);
                     break;
 
                 case "expression":
-                    component_divider = evaluate_expression(this.object_content, component_divider, this);
+                    component_divider = evaluate_expression(content_without_comment, component_divider, this);
                     break;
 
                 case "function":
-                    component_divider = evaluate_function(this.object_content, component_divider, this);
+                    component_divider = evaluate_function(content_without_comment, component_divider, this);
                     break;
 
                 case "indention":
-                    component_divider = evaluate_indention(this.object_content, component_divider);
+                    component_divider = evaluate_indention(content_without_comment, component_divider);
                     break;
 
                 case "comment":
-                    component_divider = evaluate_comment(this.object_content, component_divider);
+                    component_divider = evaluate_comment(content_without_comment, component_divider);
+                    const comment_content = component_divider.get_component_by_type("comment");
+                    content_without_comment = comment_content.length > 0 ? this.object_content.substring(0, comment_content[0].begin_index) : this.object_content;
                     break;
             }
         }

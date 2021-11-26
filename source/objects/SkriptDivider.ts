@@ -30,6 +30,11 @@ export class SkriptDivider {
         return this.components;
     }
 
+    public get_component_by_type(component_type: SkriptType): SkriptDividerComponent[] {
+        // find all components with the given type
+        return this.components.filter(loop_component => loop_component.component_type === component_type);
+    }
+
     public override_component(begin: number, end: number): SkriptDividerComponent[] {
         // find all components that override the given component
         return this.components.filter(loop_component => loop_component.begin_index <= end && loop_component.end_index >= begin);
