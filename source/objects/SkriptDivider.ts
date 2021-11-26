@@ -45,10 +45,20 @@ export class SkriptDivider {
             }
             // clone parent object parent types with different reference
             let loop_component_parent_types = [...parent_object.parent_types];
+            if (!loop_component_parent_types.includes(loop_component.component_type)) {
+                // add new parent type if not included
+                loop_component_parent_types.push(loop_component.component_type);
+            }
+            /* OLD METHOD
+            
             if (!loop_component_parent_types.includes(parent_object.object_type)) {
                 // add new parent type if not included
                 loop_component_parent_types.push(parent_object.object_type);
+                console.log("APPEND-> " + parent_object.object_type);
+                console.log(loop_component_parent_types);
             }
+            
+            */
             export_objects.push(divider_component_to_object(script, loop_component, parent_object.object_depth, loop_component_parent_types, false));
             next_index = loop_component.end_index + 1;
         }

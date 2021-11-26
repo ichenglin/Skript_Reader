@@ -24,7 +24,7 @@ export function evaluate_string(script: string, divider: SkriptDivider, parent_o
                         divider.add_component({begin_index: string_begin, end_index: script_index, component_type: "string"} as SkriptDividerComponent);
                     }
                 } else {
-                    if (script[script_index + 1] !== "\"") {
+                    if (ignore_error !== true && script[script_index + 1] !== "\"") {
                         // if not double ", throw error
                         // should not be able to reach here, but still added incase
                         throw reader_error("string literal not enclosed", script.slice(script_index));
