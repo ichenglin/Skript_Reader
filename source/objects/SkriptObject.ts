@@ -10,6 +10,7 @@ import { evaluate_indention } from "../reader/evaluate_indention";
 import { evaluate_function } from "../reader/evaluate_function";
 
 import * as object_type_components from "../data/object_component_types.json";
+import { evaluate_keyword } from "../reader/evaluate_keyword";
 
 export class SkriptObject {
 
@@ -86,6 +87,14 @@ export class SkriptObject {
                     component_divider = evaluate_comment(content_without_comment, component_divider);
                     const comment_content = component_divider.get_component_by_type("comment");
                     content_without_comment = comment_content.length > 0 ? this.object_content.substring(0, comment_content[0].begin_index) : this.object_content;
+                    break;
+
+                default:
+                    // multiple types using evaluate keyword function
+                    const keyword_types: SkriptType[] = ["boolean"];
+                    if (keyword_types.includes(loop_type_component)) {
+                        component_divider = evaluate_keyword(content_without_comment, component_divider, this, loop_type_component);
+                    }
                     break;
             }
         }

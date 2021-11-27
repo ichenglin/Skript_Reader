@@ -1,34 +1,47 @@
 {
     "body": {
         "maximum_depth": 1,
-        "child_components": ["comment", "indention", "function", "string", "variable", "number"]
+        "child_components": ["comment", "indention", "function", "string", "variable", "boolean", "number"],
+        "keywords": null
     },
     "string": {
         "maximum_depth": null,
-        "child_components": ["expression"]
+        "child_components": ["expression"],
+        "keywords": null
     },
     "number": {
         "maximum_depth": null,
-        "child_components": []
+        "child_components": [],
+        "keywords": null
+    },
+    "boolean": {
+        "maximum_depth": null,
+        "child_components": [],
+        "keywords": ["true", "yes", "on", "false", "no", "off"]
     },
     "expression": {
         "maximum_depth": null,
-        "child_components": ["function", "string", "variable", "number"]
+        "child_components": ["function", "string", "variable", "boolean", "number"],
+        "keywords": null
     },
     "variable": {
         "maximum_depth": null,
-        "child_components": ["expression"]
+        "child_components": ["expression"],
+        "keywords": null
     },
     "function": {
         "maximum_depth": null,
-        "child_components": ["string", "variable", "number"]
+        "child_components": ["string", "variable", "boolean", "number"],
+        "keywords": null
     },
     "indention": {
         "maximum_depth": 1,
-        "child_components": []
+        "child_components": [],
+        "keywords": null
     },
     "comment": {
         "maximum_depth": 1,
-        "child_components": []
+        "child_components": [],
+        "keywords": null
     }
 }
