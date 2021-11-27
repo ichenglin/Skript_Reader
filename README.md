@@ -24,6 +24,7 @@ npm install skript-reader
 Body,
 String,
 Number,
+Boolean,
 Expression,
 Variable,
 Function,
