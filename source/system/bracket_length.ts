@@ -1,7 +1,5 @@
-import { SkriptDivider } from "../objects/SkriptDivider";
 import { SkriptObject, SkriptObjectTypeOnly } from "../objects/SkriptObject";
-import { evaluate_string } from "../reader/evaluate_string";
-import { evaluate_variable } from "../reader/evaluate_variable";
+import { expression_child } from "./expression_child";
 import { reader_error } from "./reader_error";
 
 export function bracket_length(script: string, parent_object: SkriptObject): number {
@@ -27,16 +25,12 @@ export function bracket_length(script: string, parent_object: SkriptObject): num
 
             case "\"":
                 // ignore string
-                const ignore_string = evaluate_string(script.slice(script_index), new SkriptDivider(), parent_object).get_component()[0];
-                const ignore_string_length = ignore_string.end_index - ignore_string.begin_index + 1;
-                script_index += ignore_string_length - 1;
+                script_index += expression_child(script.slice(script_index), parent_object) - 1;
                 break;
 
             case "{":
                 // ignore variable
-                const ignore_variable = evaluate_variable(script.slice(script_index), new SkriptDivider(), new SkriptObjectTypeOnly("body")).get_component()[0];
-                const ignore_variable_length = ignore_variable.end_index - ignore_variable.begin_index + 1;
-                script_index += ignore_variable_length - 1;
+                script_index += expression_child(script.slice(script_index), new SkriptObjectTypeOnly("body")) - 1;
                 break;
         }
     }

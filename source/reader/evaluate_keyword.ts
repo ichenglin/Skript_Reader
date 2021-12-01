@@ -40,10 +40,11 @@ export function evaluate_keyword(script: string, divider: SkriptDivider, parent_
         let result;
         // loop through each word in the script part
         while((result = word_matcher.exec(script_parts[script_part_index].content)) !== null) {
+            const word_match = result[2].toLowerCase();
             const word_match_prefix = result[1] !== undefined ? result[1] : "";
             const word_match_index = script_parts[script_part_index].begin_index + result.index + word_match_prefix.length;
             // check if the word is a keyword of given type
-            if (object_type_components[keyword_type].keywords?.includes(result[2].toLowerCase())) {
+            if (object_type_components[keyword_type].keywords?.find(keyword => new RegExp(keyword).test(word_match.toLowerCase()) === true) !== undefined) {
                 divider.add_component({begin_index: word_match_index, end_index: word_match_index + result[2].length - 1, component_type: keyword_type} as SkriptDividerComponent);
             }
         }
