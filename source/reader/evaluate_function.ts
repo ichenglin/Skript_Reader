@@ -9,7 +9,7 @@ export function evaluate_function(script: string, divider: SkriptDivider, parent
     for (let script_index = 0; script_index < script.length; script_index++) {
         switch (script[script_index]) {
             case "(":
-                const function_name_matcher = script.slice(0, script_index).match(/([a-zA-Z_]+)$/);
+                const function_name_matcher = script.slice(0, script_index).match(/([\w\d]+)$/);
                 const function_name_length = function_name_matcher === null ? 0 : function_name_matcher[0].length;
                 if (function_stage === false && function_name_length > 0) {
                     function_stage = true;
