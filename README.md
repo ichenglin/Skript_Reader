@@ -21,15 +21,16 @@ npm install skript-reader
 
 ## Object Types
 ```
-Body,
-String,
-Number,
-Boolean,
-Expression,
-Variable,
-Function,
-Indention,
-Comment
+body,
+string,
+number,
+boolean,
+expression,
+variable,
+function_variable
+function,
+indention,
+comment
 ```
 
 ## Example

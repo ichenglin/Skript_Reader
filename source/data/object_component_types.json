@@ -29,6 +29,11 @@
         "child_components": ["expression"],
         "keywords": null
     },
+    "function_variable": {
+        "maximum_depth": null,
+        "child_components": [],
+        "keywords": null
+    },
     "function": {
         "maximum_depth": null,
         "child_components": ["string", "variable", "boolean", "number"],

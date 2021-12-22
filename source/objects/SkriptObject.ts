@@ -11,6 +11,7 @@ import { evaluate_function } from "../reader/evaluate_function";
 
 import * as object_type_components from "../data/object_component_types.json";
 import { evaluate_keyword } from "../reader/evaluate_keyword";
+import { evaluate_function_header_variable } from "../unique/evaluate_function_header_variable";
 
 export class SkriptObject {
 
@@ -19,17 +20,20 @@ export class SkriptObject {
     readonly object_depth: number;
     readonly inner_components: SkriptObject[];
     readonly parent_types: SkriptType[];
+    readonly object_data: {[key: string]: any} = {};
 
-    private object_final: boolean;
-
-    constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[], final: boolean) {
+    constructor(content: string, type: SkriptType, depth: number, parent_types: SkriptType[], parent_data: {[key: string]: any}, final: boolean) {
         this.object_content = content;
+        this.object_type = type;
         this.object_depth = depth;
         this.parent_types = parent_types;
-        this.object_final = final;
 
-        this.object_type = type;
-        this.inner_components = this.object_final ? [] : this.evaluate_components();
+        this.object_data = {
+            object_final: final,
+            function_header: (depth === 0 ? content.match(/^(\t*function )(.+)$/) !== null : parent_data.function_header)
+        };
+
+        this.inner_components = final ? [] : this.evaluate_components();
     }
     
     public collapse_components(): SkriptObject[] {
@@ -50,7 +54,12 @@ export class SkriptObject {
         }
         const type = this.object_type.toString();
         const type_components = object_type_components[type as keyof typeof object_type_components].child_components as SkriptType[];
-        let component_divider = new SkriptDivider(), content_without_comment = this.object_content;
+        let component_divider = new SkriptDivider();
+        if (this.object_data.function_header === true) {
+            // object is function header, evaluate its variables
+            component_divider = evaluate_function_header_variable(this.object_content, component_divider);
+        }
+        let content_without_comment = this.object_content
         for (let type_components_index = 0; type_components_index < type_components.length; type_components_index++) {
             const loop_type_component = type_components[type_components_index];
             const loop_type_maximum_depth = object_type_components[loop_type_component as keyof typeof object_type_components].maximum_depth;
@@ -106,7 +115,7 @@ export class SkriptObject {
 export class SkriptObjectTypeOnly extends SkriptObject {
 
     constructor(type: SkriptType) {
-        super("", type, -1, [], true);
+        super("", type, -1, [], {}, true);
     }
 
 }

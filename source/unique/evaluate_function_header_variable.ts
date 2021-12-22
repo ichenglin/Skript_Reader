@@ -1,23 +1,11 @@
 import { SkriptDivider, SkriptDividerComponent } from "../objects/SkriptDivider";
 import { SkriptObjectTypeOnly } from "../objects/SkriptObject";
-import { evaluate_function } from "../reader/evaluate_function";
 import { bracket_length } from "../system/bracket_length";
 import { expression_child } from "../system/expression_child";
 
-export function evaluate_function_header(script: string, divider: SkriptDivider): SkriptDivider {
-    const function_matcher = script.match(/^(\t*function )(.+)$/);
-    if (function_matcher == null) {
-        // script doesn't match with "function (something)"
-        return divider;
-    }
-    const function_component = evaluate_function(script.slice(function_matcher[1].length), new SkriptDivider, new SkriptObjectTypeOnly("body")).get_component();
-    if (function_component.length <= 0) {
-        // script doesn't match with "function name(something)"
-        return divider;
-    }
-    const function_body = script.slice(function_matcher[1].length + function_component[0].begin_index, function_matcher[1].length + function_component[0].end_index + 1);
-    const function_parameter_matcher = function_body.match(/^([\w\d]+)\((.*)\)$/);
-    if (function_parameter_matcher == null) {
+export function evaluate_function_header_variable(script: string, divider: SkriptDivider): SkriptDivider {
+    const function_parameter_matcher = script.match(/^([\w\d]+)\((.*)\)$/);
+    if (function_parameter_matcher === null) {
         // somehow caused an invalid match, this should never happen
         return divider;
     }
@@ -52,18 +40,18 @@ export function evaluate_function_header(script: string, divider: SkriptDivider)
     function_parameter_groups.push(function_parameter.slice(parameter_begin));
     // loop through parameter groups for each parameter components
     for (let group_index = 0; group_index < function_parameter_groups.length; group_index++) {
-        const group_begin_index = function_matcher[1].length + function_component[0].begin_index + function_parameter_matcher[1].length + 1 + function_parameter_groups.slice(0, group_index).join(",").length + (group_index >= 1 ? 1 : 0);
+        const group_begin_index = function_parameter_matcher[1].length + 1 + function_parameter_groups.slice(0, group_index).join(",").length + (group_index >= 1 ? 1 : 0);
         // these two lines are used to debugging
-        // const group_begin_index_visualized = function_matcher[1] + "^".repeat(function_component[0].begin_index) + function_parameter_matcher[1] + "(" + function_parameter_groups.slice(0, group_index).join(",") + (group_index >= 1 ? "," : "");
+        // const group_begin_index_visualized = function_parameter_matcher[1] + "(" + function_parameter_groups.slice(0, group_index).join(",") + (group_index >= 1 ? "," : "");
         // console.log(group_begin_index_visualized + "\n" + group_begin_index_visualized.length + " " + group_begin_index);
         const group_matcher = function_parameter_groups[group_index].match(/^(\s*)([^:]+)(:?\s*)([^=]*)(?:=(.*))?$/);
-        if (group_matcher == null) {
+        if (group_matcher === null) {
             // somehow caused an invalid match, this should never happen, skip to next group
             continue;
         }
         const group_variable_begin = group_begin_index + group_matcher[1].length;
         const group_variable_end = group_variable_begin + group_matcher[2].length - 1;
-        divider.add_component({begin_index: group_variable_begin, end_index: group_variable_end, component_type: "variable"} as SkriptDividerComponent);
+        divider.add_component({begin_index: group_variable_begin, end_index: group_variable_end, component_type: "function_variable"} as SkriptDividerComponent);
     }
     return divider;
 }

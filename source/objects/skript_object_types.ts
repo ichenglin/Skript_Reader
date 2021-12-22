@@ -1,1 +1,1 @@
-export type SkriptType = "body" | "string" | "number" | "boolean" | "expression" | "variable" | "function" | "indention" | "comment";
+export type SkriptType = "body" | "string" | "number" | "boolean" | "expression" | "variable" | "function_variable" |"function" | "indention" | "comment";
