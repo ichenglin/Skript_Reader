@@ -3,7 +3,7 @@ import { SkriptObjectTypeOnly } from "../objects/SkriptObject";
 import { bracket_length } from "../system/bracket_length";
 import { expression_child } from "../system/expression_child";
 
-export function evaluate_function_header_variable(script: string, divider: SkriptDivider): SkriptDivider {
+export function evaluate_function_variable(script: string, divider: SkriptDivider): SkriptDivider {
     const function_parameter_matcher = script.match(/^([\w\d]+)\((.*)\)$/);
     if (function_parameter_matcher === null) {
         // somehow caused an invalid match, this should never happen
@@ -26,12 +26,12 @@ export function evaluate_function_header_variable(script: string, divider: Skrip
                 break;
 
             case "\"":
-                // ignore string in function
+                // skip default value with strings
                 parameter_index += expression_child(function_parameter.slice(parameter_index), new SkriptObjectTypeOnly("function")) - 1;
                 break;
     
             case "{":
-                // ignore variable in function
+                // skip default value with variables
                 parameter_index += expression_child(function_parameter.slice(parameter_index), new SkriptObjectTypeOnly("function")) - 1;
                 break;
         }

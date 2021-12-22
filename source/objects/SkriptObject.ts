@@ -8,10 +8,10 @@ import { evaluate_expression } from "../reader/evaluate_expression";
 import { evaluate_comment } from "../reader/evaluate_comment";
 import { evaluate_indention } from "../reader/evaluate_indention";
 import { evaluate_function } from "../reader/evaluate_function";
+import { evaluate_keyword } from "../reader/evaluate_keyword";
+import { evaluate_function_variable } from "../reader/evaluate_function_variable";
 
 import * as object_type_components from "../data/object_component_types.json";
-import { evaluate_keyword } from "../reader/evaluate_keyword";
-import { evaluate_function_header_variable } from "../unique/evaluate_function_header_variable";
 
 export class SkriptObject {
 
@@ -55,10 +55,6 @@ export class SkriptObject {
         const type = this.object_type.toString();
         const type_components = object_type_components[type as keyof typeof object_type_components].child_components as SkriptType[];
         let component_divider = new SkriptDivider();
-        if (this.object_data.function_header === true) {
-            // object is function header, evaluate its variables
-            component_divider = evaluate_function_header_variable(this.object_content, component_divider);
-        }
         let content_without_comment = this.object_content
         for (let type_components_index = 0; type_components_index < type_components.length; type_components_index++) {
             const loop_type_component = type_components[type_components_index];
@@ -74,6 +70,14 @@ export class SkriptObject {
 
                 case "variable":
                     component_divider = evaluate_variable(content_without_comment, component_divider, this);
+                    break;
+
+                case "function_variable":
+                    if (this.object_data.function_header === false) {
+                        // object is not function header
+                        break;
+                    }
+                    component_divider = evaluate_function_variable(content_without_comment, component_divider);
                     break;
 
                 case "number":

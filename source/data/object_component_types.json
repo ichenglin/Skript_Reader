@@ -36,7 +36,7 @@
     },
     "function": {
         "maximum_depth": null,
-        "child_components": ["string", "variable", "boolean", "number"],
+        "child_components": ["function_variable", "string", "variable", "boolean", "number"],
         "keywords": null
     },
     "indention": {
