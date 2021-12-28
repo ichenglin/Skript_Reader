@@ -9,7 +9,10 @@ import { evaluate_comment } from "../reader/evaluate_comment";
 import { evaluate_indention } from "../reader/evaluate_indention";
 import { evaluate_function } from "../reader/evaluate_function";
 import { evaluate_keyword } from "../reader/evaluate_keyword";
-import { evaluate_function_variable } from "../reader/evaluate_function_variable";
+import { evaluate_function_parameter } from "../reader/function_header/evaluate_function_parameter";
+import { evaluate_function_parameter_name } from "../reader/function_header/evaluate_function_parameter_name";
+import { evaluate_function_parameter_type } from "../reader/function_header/evaluate_function_parameter_type";
+import { evaluate_function_parameter_default } from "../reader/function_header/evaluate_function_parameter_default";
 
 import * as object_type_components from "../data/object_component_types.json";
 
@@ -30,7 +33,7 @@ export class SkriptObject {
 
         this.object_data = {
             object_final: final,
-            function_header: (depth === 0 ? content.match(/^(\t*function )(.+)$/) !== null : parent_data.function_header)
+            function_header: (depth === 0 ? content.match(/^(\s*function )(.+)$/) !== null : parent_data.function_header)
         };
 
         this.inner_components = final ? [] : this.evaluate_components();
@@ -72,14 +75,6 @@ export class SkriptObject {
                     component_divider = evaluate_variable(content_without_comment, component_divider, this);
                     break;
 
-                case "function_variable":
-                    if (this.object_data.function_header === false) {
-                        // object is not function header
-                        break;
-                    }
-                    component_divider = evaluate_function_variable(content_without_comment, component_divider);
-                    break;
-
                 case "number":
                     component_divider = evaluate_number(content_without_comment, component_divider);
                     break;
@@ -100,6 +95,26 @@ export class SkriptObject {
                     component_divider = evaluate_comment(content_without_comment, component_divider);
                     const comment_content = component_divider.get_component_by_type("comment");
                     content_without_comment = comment_content.length > 0 ? this.object_content.substring(0, comment_content[0].begin_index) : this.object_content;
+                    break;
+
+                case "function_parameter":
+                    if (this.object_data.function_header === false) {
+                        // object is not function header
+                        break;
+                    }
+                    component_divider = evaluate_function_parameter(content_without_comment, component_divider);
+                    break;
+
+                case "function_parameter_name":
+                    component_divider = evaluate_function_parameter_name(content_without_comment, component_divider);
+                    break;
+
+                case "function_parameter_type":
+                    component_divider = evaluate_function_parameter_type(content_without_comment, component_divider);
+                    break;
+
+                case "function_parameter_default":
+                    component_divider = evaluate_function_parameter_default(content_without_comment, component_divider);
                     break;
 
                 default:
