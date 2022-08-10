@@ -6,9 +6,9 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fireclaws9/Skript_Reader"
+    "url": "https://github.com/ichenglin/Skript_Reader"
   },
-  "homepage": "https://github.com/fireclaws9/Skript_Reader#readme",
+  "homepage": "https://github.com/ichenglin/Skript_Reader#readme",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "keywords": [
