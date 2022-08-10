@@ -17,7 +17,7 @@ in order to provide an **easy implementation** for **syntax markup** and **obfus
 This library is mainly used in the development of
 **[Skript Studio](https://github.com/ichenglin/Skript_Studio)** and **[Skript Obfuscator](https://github.com/ichenglin/Skript_Obfuscator)**.
 
-The **demo** of the library could be accessed in **[Skript Studio](https://github.com/ichenglin/Skript_Studio)**.
+The **demo** of the library could be accessed in **[Skript Studio](https://skriptstudio.runtimecloud.com/)**.
 
 
 ## Features
