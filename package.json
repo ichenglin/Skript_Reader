@@ -23,6 +23,7 @@
     "build/"
   ],
   "devDependencies": {
+    "@types/node": "^18.6.5",
     "typescript": "^4.4.4"
   }
 }
